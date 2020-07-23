@@ -1,0 +1,111 @@
+version: '3.2'
+
+services:
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+    ports:
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks
+      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      - elk
+
+#   logstash:
+#     build:
+#       context: logstash/
+#       args:
+#         ELK_VERSION: $ELK_VERSION
+#     volumes:
+#       - type: bind
+#         source: ./logstash/config/logstash.yml
+#         target: /usr/share/logstash/config/logstash.yml
+#         read_only: true
+#       - type: bind
+#         source: ./logstash/pipeline
+#         target: /usr/share/logstash/pipeline
+#         read_only: true
+#     ports:
+#       - "5000:5000"
+#       - "9600:9600"
+#     environment:
+#       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#     networks:
+#       - elk
+#     depends_on:
+#       - elasticsearch
+
+  kibana:
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./kibana/config/kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
+        read_only: true
+    ports:
+      - "127.0.0.1:5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  lamp:
+    build:
+      context: lamp/
+      dockerfile: Dockerfile
+    networks:
+      - elk
+    volumes:
+      - ./lamp/packetbeat.yml:/etc/packetbeat/packetbeat.yml
+      - ./lamp/filebeat.yml:/etc/filebeat/filebeat.yml
+      - ./lamp/metricbeat.yml:/etc/metricbeat/metricbeat.yml
+      - ./lamp/heartbeat.yml:/etc/heartbeat/heartbeat.yml
+      - ./lamp/start_service.sh:/var/www/html/start_service.sh
+      - ./lamp/suricata.yaml:/etc/suricata/suricata.yaml
+      - ./lamp/sql.rules:/usr/share/suricata/rules/sql.rules
+    ports:
+      - "80:80"
+    links:
+      - mysql:mysql
+
+  mysql:
+    build:
+      context: mysql/
+      dockerfile: Dockerfile
+    restart: on-failure:5
+    environment:
+      - MYSQL_ROOT_PASSWORD=Passw0rd!
+    networks:
+      - elk
+    volumes:
+      - ./database:/var/lib/mysql
+      - ./mysql/filebeat.yml:/etc/filebeat/filebeat.yml
+      - ./mysql/metricbeat.yml:/etc/metricbeat/metricbeat.yml
+      - ./mysql/heartbeat.yml:/etc/heartbeat/heartbeat.yml
+      - ./mysql/start_service.sh:/start_service.sh
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch:
