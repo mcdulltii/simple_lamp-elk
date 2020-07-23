@@ -13,7 +13,7 @@
 chmod +x ./setup.sh
 ./setup.sh
 ```
-<Run SQL commands from [Config files](https://github.com/mcdulltii/dvwa-elk#config-files)>
+<Run SQL commands from [Config files](https://github.com/mcdulltii/simple_lamp-elk#config-files)>
 ```shellsession
 chmod +x ./start.sh
 ./start.sh
