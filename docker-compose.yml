@@ -72,6 +72,8 @@ services:
       dockerfile: Dockerfile
     networks:
       - elk
+    environment:
+      - elasticsearch_password=$elasticsearch_password
     volumes:
       - ./lamp/packetbeat.yml:/etc/packetbeat/packetbeat.yml
       - ./lamp/filebeat.yml:/etc/filebeat/filebeat.yml
@@ -91,7 +93,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure:5
     environment:
-      - MYSQL_ROOT_PASSWORD=Passw0rd!
+      - elasticsearch_password=$elasticsearch_password
     networks:
       - elk
     volumes:

@@ -1261,7 +1261,7 @@ setup.kibana:
   # Optional protocol and basic auth credentials.
   #protocol: "https"
   username: "elastic"
-  password: "TTF8notmD726DgbAS3an"
+  # password: "TTF8notmD726DgbAS3an"
 
   # Optional HTTP path
   #path: ""
