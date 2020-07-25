@@ -93,6 +93,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure:5
     environment:
+      - MYSQL_ROOT_PASSWORD=Passw0rd!
       - elasticsearch_password=$elasticsearch_password
     networks:
       - elk
