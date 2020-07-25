@@ -25,7 +25,7 @@ services:
     networks:
       elk:
         aliases:
-          simple.lamp
+          - simple.lamp
 
 #   logstash:
 #     build:
@@ -49,7 +49,7 @@ services:
 #     networks:
 #       elk:
 #         aliases:
-#           simple.lamp
+#           - simple.lamp
 #     depends_on:
 #       - elasticsearch
 
@@ -68,7 +68,7 @@ services:
     networks:
       elk:
         aliases:
-          simple.lamp
+          - simple.lamp
     depends_on:
       - elasticsearch
 
@@ -80,7 +80,7 @@ services:
     networks:
       elk:
         aliases:
-          simple.lamp
+          - simple.lamp
     environment:
       - elasticsearch_password=$elasticsearch_password
     volumes:
@@ -106,7 +106,7 @@ services:
     networks:
       elk:
         aliases:
-          simple.lamp
+          - simple.lamp
     volumes:
       - ./database:/var/lib/mysql
       - ./mysql/filebeat.yml:/etc/filebeat/filebeat.yml
