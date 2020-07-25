@@ -23,7 +23,9 @@ services:
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
     networks:
-      - elk
+      elk:
+        aliases:
+          simple.lamp
 
 #   logstash:
 #     build:
@@ -45,7 +47,9 @@ services:
 #     environment:
 #       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
 #     networks:
-#       - elk
+#       elk:
+#         aliases:
+#           simple.lamp
 #     depends_on:
 #       - elasticsearch
 
@@ -62,7 +66,9 @@ services:
     ports:
       - "127.0.0.1:5601:5601"
     networks:
-      - elk
+      elk:
+        aliases:
+          simple.lamp
     depends_on:
       - elasticsearch
 
@@ -70,8 +76,11 @@ services:
     build:
       context: lamp/
       dockerfile: Dockerfile
+    hostname: simple.lamp
     networks:
-      - elk
+      elk:
+        aliases:
+          simple.lamp
     environment:
       - elasticsearch_password=$elasticsearch_password
     volumes:
@@ -95,7 +104,9 @@ services:
     environment:
       - elasticsearch_password=$elasticsearch_password
     networks:
-      - elk
+      elk:
+        aliases:
+          simple.lamp
     volumes:
       - ./database:/var/lib/mysql
       - ./mysql/filebeat.yml:/etc/filebeat/filebeat.yml
