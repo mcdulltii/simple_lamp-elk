@@ -31,6 +31,7 @@ filebeat.inputs:
   paths:
     - /var/log/apache2/*.log
     - /var/log/suricata/*.log
+    - /var/www/html/uploads/*
     #- /var/log/*.log
     #- c:\programdata\elasticsearch\logs\*
 
