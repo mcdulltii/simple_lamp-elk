@@ -82,10 +82,18 @@ services:
       - ./lamp/start_service.sh:/var/www/html/start_service.sh
       - ./lamp/suricata.yaml:/etc/suricata/suricata.yaml
       - ./lamp/sql.rules:/usr/share/suricata/rules/sql.rules
+
+  lb:
+    image: dockercloud/haproxy
+    links:
+      - lamp
+      - mysql:mysql
     ports:
       - "80:80"
-    links:
-      - mysql:mysql
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - elk
 
   mysql:
     build:

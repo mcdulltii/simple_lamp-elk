@@ -1,5 +1,5 @@
 docker-compose build && \
-docker-compose up -d
+docker-compose up --scale lamp=3 -d
 sleep 5
 echo "
 CREATE USER 'sqldb'@'%' IDENTIFIED BY 'Passw0rd!';
