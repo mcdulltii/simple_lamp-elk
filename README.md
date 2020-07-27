@@ -1,5 +1,5 @@
 # Simple_Lamp-ELK
-[![](https://img.shields.io/badge/Category-Vulnerability%20Detection-E5A505?style=flat-square)]() [![](https://img.shields.io/badge/Language-Docker%20%2f%20LAMP-E5A505?style=flat-square)]() [![](https://img.shields.io/badge/Version-1.0-E5A505?style=flat-square&color=green)]()
+[![](https://img.shields.io/badge/Category-Vulnerability%20Detection-E5A505?style=flat-square)]() [![](https://img.shields.io/badge/Language-Docker%20%2f%20LAMP-E5A505?style=flat-square)]() [![](https://img.shields.io/badge/Version-2.0-E5A505?style=flat-square&color=green)]()
 
 ## Features
 - Packetbeat
@@ -7,6 +7,7 @@
 - Metricbeat
 - Heartbeat
 - Suricata
+- Load Balancer
 
 ## Setting up system
 ```shellsession
@@ -17,6 +18,32 @@ chmod +x ./setup.sh
 ```shellsession
 chmod +x ./start.sh
 ./start.sh
+```
+
+## Load-Balancing
+
+Using dockercloud/haproxy docker to automate load balancing for docker scaling of the LAMP server
+
+Port forward web server via docker proxy from haproxy
+
+```
+lb:
+  image: dockercloud/haproxy
+  links:
+    - lamp
+    - mysql:mysql
+  ports:
+    - "80:80"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  networks:
+    - elk
+```
+
+Scale up web server using docker-compose
+
+```shellsession
+docker-compose up --scale lamp=3 -d
 ```
 
 ## Logging system
