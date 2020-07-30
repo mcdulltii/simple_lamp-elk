@@ -49,3 +49,5 @@ RUN cd suricata-5.0.1 && \
 RUN echo "./start_service.sh" >> ~/.bashrc
 
 COPY ./suricata.yml.disabled /etc/filebeat/modules.d/suricata.yml.disabled
+
+RUN rm /var/www/html/.git -r
