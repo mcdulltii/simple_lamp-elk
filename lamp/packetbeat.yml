@@ -148,7 +148,7 @@ setup.kibana:
   # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
   host: "kibana:5601"
   username: "elastic"
-  # password: "TTF8notmD726DgbAS3an"
+  password: "TTF8notmD726DgbAS3an"
   # Kibana Space ID
   # ID of the Kibana Space into which the dashboards should be loaded. By default,
   # the Default Space will be used.
@@ -179,6 +179,8 @@ output.elasticsearch:
   # password: "TTF8notmD726DgbAS3an"
   # Optional protocol and basic auth credentials.
   #protocol: "https"
+  username: "elastic"
+  password: "TTF8notmD726DgbAS3an"
 
 #----------------------------- Logstash output --------------------------------
 # output.logstash:
